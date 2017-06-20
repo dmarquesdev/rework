@@ -1,0 +1,3 @@
+export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
+export const START_LOADING = 'START_LOADING';
+export const STOP_LOADING = 'STOP_LOADING';
