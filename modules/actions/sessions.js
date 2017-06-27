@@ -92,7 +92,7 @@ export function login(email, password) {
     };
 }
 
-export function recoveryPassword(password, token) {
+export function recoverPassword(password, token) {
     return function (dispatch) {
         dispatch(startRequest());
 
