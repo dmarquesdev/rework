@@ -23,18 +23,29 @@ export default class App extends React.Component {
     }
 
     componentDidUpdate() {
+        this.shouldRedirect();
+    }
+
+    /* Private Methods */
+    shouldRedirect() {
+        if (this.props.shouldBeLoggedIn !== this.isLoggedIn()) {
+            window.location.href = this.props.redirectPath;
+        }
+
         if (this.props.shouldBeLoggedIn !== this.props.isLoggedIn) {
             window.location.href = this.props.redirectPath;
         }
     }
 
-    /* Private Methods */
     isLoggedIn() {
         return Cookies.getCookie('Session') !== undefined;
     }
 
     render() {
-        if (this.props.shouldBeLoggedIn !== this.props.isLoggedIn) {
+        this.shouldRedirect();
+
+        if (this.props.shouldBeLoggedIn !== this.props.isLoggedIn ||
+            this.props.shouldBeLoggedIn !== this.isLoggedIn()) {
             return (
                 <div></div>
             );
