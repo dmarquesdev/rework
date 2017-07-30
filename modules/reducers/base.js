@@ -1,3 +1,6 @@
+// Libs
+import Immutable from 'seamless-immutable';
+
 export default function items(
     state,
     action,
@@ -8,25 +11,28 @@ export default function items(
     INSERT = 'action4',
     RECEIVE_ONE = 'action5',
     UPDATE_ALL = 'action6') {
-    const newState = state;
-    const payloadItems = {};
-    let newItems = [];
-
     switch (action.type) {
-        case RECEIVE:
-            newItems = action.payload.items.items.map(item => Object.assign({ error, 'key': item.id }, item));
-            newState.items = Array.from(new Set([...state, ...newItems]));
+        case RECEIVE: {
+            const newItems = action.payload.items.items.map(item => Object.assign({ error, 'key': item.id }, item));
+            const allItems = Array.from(new Set([...state.items, ...newItems]));
 
-            return newState;
-        case REMOVE:
-            newState.items = state.items.filter(item => item.id !== action.payload.id);
-            return newState;
-        case UPDATE:
-            if (newState.page === undefined) {
-                return Object.assign(state, action.payload.item);
+            return Immutable.from({
+                'total': action.payload.items.total,
+                'page': action.payload.items.page,
+                'limit': action.payload.items.limit,
+                'items': allItems
+            });
+        }
+        case REMOVE: {
+            const filteredItems = state.items.filter(item => item.id !== action.payload.id);
+            return Immutable.from(Object.assign({ ...state }, { 'items': filteredItems }));
+        }
+        case UPDATE: {
+            if (state.page === undefined) {
+                return Immutable.from(Object.assign({ ...state }, action.payload.item));
             }
 
-            newState.items = state.items.map(item => {
+            const updatedItems = state.items.map(item => {
                 if (item.id === action.payload.item.id) {
                     return action.payload.item;
                 }
@@ -34,21 +40,20 @@ export default function items(
                 return item;
             });
 
-            return newState;
-        case INSERT:
-            action.payload.items.forEach(item => {
-                const newItem = { ...item, error };
-                newState.items.push(newItem);
-            });
-            return newState;
-        case RECEIVE_ONE:
-            return action.payload.item;
-        case UPDATE_ALL:
-            action.payload.items.forEach(item => {
-                payloadItems[item.id] = item;
-            });
+            return Immutable.from(Object.assign({ ...state }, { 'items': updatedItems }));
+        }
+        case INSERT: {
+            const newItems = action.payload.items.map(item => ({ ...item, error, 'key': item.id }));
+            const allItems = Array.from(new Set([...state.items, ...newItems]));
 
-            newState.items = state.items.map(item => {
+            return Immutable.from(Object.assign({ ...state }, { 'items': allItems }));
+        }
+        case RECEIVE_ONE:
+            return Immutable.from(action.payload.item);
+        case UPDATE_ALL: {
+            const payloadItems = action.payload.items.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
+
+            const updatedItems = state.items.map(item => {
                 if (payloadItems[item.id] !== undefined) {
                     return payloadItems[item.id];
                 }
@@ -56,8 +61,9 @@ export default function items(
                 return item;
             });
 
-            return newState;
+            return Immutable.from(Object.assign({ ...state }, { 'items': updatedItems }));
+        }
         default:
-            return state;
+            return Immutable.isImmutable(state) ? state : Immutable.from(state);
     }
 }

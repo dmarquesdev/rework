@@ -72,7 +72,7 @@ App.defaultProps = {
 
 App.propTypes = {
     'dict': PropTypes.object.isRequired,
-    'children': React.PropTypes.node,
+    'children': PropTypes.node,
     'title': PropTypes.string,
     'isLoading': PropTypes.bool,
     'isLoggedIn': PropTypes.bool,

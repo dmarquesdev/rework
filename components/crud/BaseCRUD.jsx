@@ -38,14 +38,16 @@ export default class BaseCRUD extends React.Component {
         } else {
             this.setState({ error });
         }
+
+        return valid;
     }
 
     onUpdate(updatedItem, updatedItems, item) {
-        const { valid, error } = this.props.validate(merge(cloneDeep(item), updatedItem));
+        const { valid, error } = this.props.validate(item.merge(updatedItem));
 
         if (valid) {
             this.setState({ 'updatedItems': omit(updatedItems, item.id) });
-            this.props.onUpdate(merge(merge(item, updatedItem), { error }));
+            this.props.onUpdate(item.merge(updatedItem).merge({ error }));
         } else {
             this.setState({
                 'updatedItems': merge(updatedItems, { [item.id]: merge(updatedItem, { error }) })
@@ -67,11 +69,10 @@ export default class BaseCRUD extends React.Component {
 
     onItemUpdate(id, key, value) {
         const updatedItems = this.state.updatedItems;
-        const updatedItem = merge(this.state.updatedItems[id], { [key]: value });
 
         updatedItems[id][key] = value;
 
-        this.setState({ 'updatedItems': merge(updatedItems, { [id]: updatedItem }) });
+        this.setState({ updatedItems });
     }
 
     onUpdateAll() {
@@ -84,7 +85,7 @@ export default class BaseCRUD extends React.Component {
 
                 if (valid) {
                     updatedItems = omit(updatedItems, item.id);
-                    return acc.concat([merge(merge(item, updatedItem), { error })]);
+                    return acc.concat([item.merge(updatedItem).merge({ error })]);
                 }
 
                 updatedItems = merge(updatedItems, { [item.id]: merge(updatedItem, { error }) });

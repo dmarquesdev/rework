@@ -1,5 +1,6 @@
 // React
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Antd
 import { Spin } from 'antd';
@@ -22,8 +23,8 @@ MainContainer.defaulProps = {
 };
 
 MainContainer.propTypes = {
-    'style': React.PropTypes.object,
-    'children': React.PropTypes.node,
-    'className': React.PropTypes.string,
-    'isLoading': React.PropTypes.bool
+    'style': PropTypes.object,
+    'children': PropTypes.node,
+    'className': PropTypes.string,
+    'isLoading': PropTypes.bool
 };
