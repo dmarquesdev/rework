@@ -53,6 +53,8 @@ export default class BaseCRUD extends React.Component {
                 'updatedItems': merge(updatedItems, { [item.id]: merge(updatedItem, { error }) })
             });
         }
+
+        return valid;
     }
 
     onEdit(updatedItems, item) {
