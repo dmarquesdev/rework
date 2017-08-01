@@ -58,7 +58,7 @@ export default class BaseCRUD extends React.Component {
     }
 
     onEdit(updatedItems, item) {
-        this.setState(merge(updatedItems, { [item.id]: { 'error': cloneDeep(item.error) } }));
+        this.setState(merge(updatedItems, { [item.id]: { ...item, 'error': cloneDeep(item.error) } }));
     }
 
     onCancel(updatedItems, id) {
