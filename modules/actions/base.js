@@ -165,7 +165,8 @@ export function remove(id, actionType, endpoint, local = false) {
         return fetch(`${MAIN_URL}/${endpoint}\/${id}`, {
             'method': 'DELETE',
             'headers': {
-                'X-Auth-Token': Cookies.getCookie('Session')
+                'X-Auth-Token': Cookies.getCookie('Session'),
+                'Content-Type': 'application/json'
             }
         }).then(response => {
             dispatch(stopRequest());
@@ -227,7 +228,8 @@ export function update(item, actionType, endpoint, local = false, collection = t
         return fetch(`${MAIN_URL}/${endpoint}\/${item.id}`, {
             'method': 'PUT',
             'headers': {
-                'X-Auth-Token': Cookies.getCookie('Session')
+                'X-Auth-Token': Cookies.getCookie('Session'),
+                'Content-Type': 'application/json'
             },
             'body': JSON.stringify(item)
         }).then(response => {
@@ -290,7 +292,8 @@ export function updateAll(items, actionType, endpoint, local = false) {
         return fetch(`${MAIN_URL}/${endpoint}\/`, {
             'method': 'PUT',
             'headers': {
-                'X-Auth-Token': Cookies.getCookie('Session')
+                'X-Auth-Token': Cookies.getCookie('Session'),
+                'Content-Type': 'application/json'
             },
             'body': JSON.stringify(items)
         }).then(response => {
@@ -342,7 +345,8 @@ export function insert(items, actionType, endpoint, local = false) {
         return fetch(`${MAIN_URL}/${endpoint}`, {
             'method': 'POST',
             'headers': {
-                'X-Auth-Token': Cookies.getCookie('Session')
+                'X-Auth-Token': Cookies.getCookie('Session'),
+                'Content-Type': 'application/json'
             },
             'body': JSON.stringify({ items })
         }).then(response => {
